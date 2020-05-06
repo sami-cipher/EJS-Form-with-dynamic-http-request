@@ -1,0 +1,41 @@
+<%- include('partials/header') -%>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+  <h1>My Form</h1>
+
+  <div class="control-wrapper">
+    <div id="default" style='padding:20px;'>
+      <select id="fuel" change="onChange" placeholder="Select a fuel">
+        <% for (var i = 0; i < fuel.length; i++) { %>
+          <option  value=<%= fuel[i] %>>
+            <%= fuel[i] %>
+          </option>
+        <% } %>            
+      </select>
+    </div>
+</div>
+<p id='demo'> fuel items will be here.. </p>
+<script>
+  var choices = "";
+    document.getElementById('fuel').onchange = (args) => {
+        var fuel = document.getElementById("fuel");
+        choices = "";
+        if (fuel.value) {
+          $.ajax({
+            type: 'GET',
+            url: '/fualList?type='+fuel.value,
+            success: function(result) {
+              console.log("RES__", result)
+              result.forEach(function(value, index, array) {
+                choices = choices + `<input type="checkbox" value=${value}> 
+                  ${value}</input>` + "<br>"; 
+              });
+
+              document.getElementById("demo").innerHTML = choices;
+            }
+          });
+        }
+    }
+</script>
+
+<%- include('partials/footer') -%>
